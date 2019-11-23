@@ -4,15 +4,26 @@ require 'sinatra'
 require './yolp'
 
 get '/' do
+  erb :start
+
+end
+
+post '/search' do
   erb :search
 end
 
-get '/search' do
-  erb :search
+post '/click' do
+  erb :click
+end
+
+get 'click' do
+
+
+
 end
 
 get '/result' do
- 
+
   yolp = YOLP.new
 	coord = yolp.coordinate("#{params[:address]}")
 	@coord =  "北海道札幌市北区北１２条西８丁目の座標は北緯#{coord[1]}度東経#{coord[0]}度"
@@ -21,7 +32,3 @@ get '/result' do
 	@name = "#{params[:name]}"
   erb :result_map
 end
-
-
-
-
