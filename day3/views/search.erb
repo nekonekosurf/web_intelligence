@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <title>検索</title>
+  </head>
+  <body>
+    <form action='result' method='get'>
+      <b>基準となる住所: </b>  <input type="text" name="address" value="">
+      <button type='submit' class='btn btn-primary'>検索</button>
+    </form>
+
+    <table border="1" width="800">
+      <tr>
+        <th>緯度</th><th>経度</th><th>住所</th>
+      </tr>
+      <tr>
+        <th> <div id = "ido"><p>  <%=@ido%></p></div> </th>
+        <th> <div id = "keido"><p></p></div> </th>
+      </tr>
+    </table>
+
+
+
+
+    <script type="text/javascript" charset="utf-8" src="https://map.yahooapis.jp/js/V1/jsapi?appid=dj0zaiZpPUk5SHRiSDJGZkU2VCZzPWNvbnN1bWVyc2VjcmV0Jng9NzQ-"></script>
+    <script type="text/javascript">
+
+
+    </script>
+
+
+  </body>
+</html>

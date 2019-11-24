@@ -17,9 +17,6 @@ post '/click' do
 end
 
 get 'click' do
-
-
-
 end
 
 get '/result' do
