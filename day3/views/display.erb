@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html>
 <body>
-  <p>idokeido</p>
-  <p><%= @ido %></p>
-  <p><%= @keido %></p>
-  <p><%= @dist %></p>
+  <h1>あとは成形するだけ</h1>
+  <p>入力した住所: <%= @basic_adress  %></p>
+  <p>入力した住所の緯度: <%= @ido %></p>
+  <p>入力した住所の経度: <%= @keido %></p>
+  <p>入力した住所と43.5,135.5との距離: <%= @dist %></p>
 
-  <p><%= @hash_name %></p>
 
+	<h2>ヒットした図書館のなまえと住所</h2>
+  <p><% @hash.each{|key,value| %>
+  	図書館名: <%=key %>	<br>  住所: <%=value %> <br><br>
+ 		<%} %> 
+  <h2>あんまここいらないかも</h2>
+    <p><% @array_str.each{|str| %>
+  	 <%=str %>	<br>
+ 		<%} %> 
+  <h2>距離の近い順</h2>
+    <p><% @array_order.each{|str| %>
+  	 <%=str %>	<br>
+ 		<%} %> 
+  
+  
 
+  </p>
 
 </script>
 </body>
