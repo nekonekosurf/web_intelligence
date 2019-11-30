@@ -2,7 +2,7 @@
 <html>
 <body>
   <h1>あとは成形するだけ</h1>
-  <table border="1" width="800">
+  <table border="1" width="1200">
   <tr>
     <th>入力した住所</th><th>緯度</th><th>経度</th>
   </tr>
@@ -14,7 +14,7 @@
 </table>
 <h2>検索した資料をもつ図書館一覧</h2>
 
-<table border="1" width="800">
+<table border="1" width="1200">
 <tr>
   <th>ヒットした図書館名</th><th>住所</th>
 </tr>
@@ -29,7 +29,7 @@
 </table>
 
 <h2>地図</h2>
-<div id="map" style="width:1000px; height:800px"></div>
+<div id="map" style="width:1200px; height:800px"></div>
 <script type="text/javascript" charset="utf-8" src="https://map.yahooapis.jp/js/V1/jsapi?appid=dj0zaiZpPUk5SHRiSDJGZkU2VCZzPWNvbnN1bWVyc2VjcmV0Jng9NzQ-"></script>
 <script type="text/javascript">
   window.onload = function(){
@@ -43,7 +43,7 @@
     });
     var control = new Y.SliderZoomControlVertical;
     ymap.addControl(control);
-    ymap.drawMap(new Y.LatLng(<%= @ido %>, <%= @keido %>), 8, Y.LayerSetId.NORMAL);
+    ymap.drawMap(new Y.LatLng(<%= @ido %>, <%= @keido %>), 5, Y.LayerSetId.NORMAL);
 
     //ここからラベルの追加
         var address0 = "<%= @basic_adress  %> ";

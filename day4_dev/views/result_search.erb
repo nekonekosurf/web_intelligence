@@ -7,30 +7,19 @@
   <h2>タイトル </h2>
   <table border="1" width="800">
     <tr>
-      <th>ヒットした図書館名</th>  <th>URL</th>
+      <th>順位</th><th>ヒットした図書館名</th>
     </tr>
-    <% @hash_title.each {|key,value| %>
+    <% @hash_title.each_with_index do |(key,value),k| %>
       <tr>
-        <th> <%=key %> </th>
-        <th> <%=value %> </th>
-      </tr>
-    <%}%>
-  </table>
-
-
-  <table border="1" width="800">
-    <tr>
-      <th>ヒットした図書館名</th>
-    </tr>
-    <% @hash_title.each {|key,value| %>
-      <tr>
+        <th> <%=k+1 %> </th>
         <th>
           <p>
             <a href='/result?value=<%=value%>'><%=key %></a>
           </p>
         </th>
+
       </tr>
-    <%}%>
+      <%end %>
   </table>
 </body>
 </html>
