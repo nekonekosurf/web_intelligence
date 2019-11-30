@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>検索キーワード</h2>
+  <h3> <%= @key_word %> </h3>
+
+  <h2>タイトル </h2>
+  <table border="1" width="800">
+    <tr>
+      <th>ヒットした図書館名</th>  <th>URL</th>
+    </tr>
+    <% @hash_title.each {|key,value| %>
+      <tr>
+        <th> <%=key %> </th>
+        <th> <%=value %> </th>
+      </tr>
+    <%}%>
+  </table>
+
+
+  <table border="1" width="800">
+    <tr>
+      <th>ヒットした図書館名</th>
+    </tr>
+    <% @hash_title.each {|key,value| %>
+      <tr>
+        <th>
+          <p>
+            <a href='/result?value=<%=value%>'><%=key %></a>
+          </p>
+        </th>
+      </tr>
+    <%}%>
+  </table>
+</body>
+</html>

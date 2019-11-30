@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>test</h1>
+
+<p><%= @value %> </p>
+
+<h3>template</h3>
+
+
+
+
+<table border="1" width="800">
+<tr>
+  <th>順位</th><th>図書館名</th>
+</tr>
+<br>
+<% @array_order.each_with_index do |univ,k| %>
+<tr>
+  <th> <%=k+1 %> </th>
+  <th> <%=univ %> </th>
+</tr>
+<%end %>
+</table>
+
+
+</body>
+</html>

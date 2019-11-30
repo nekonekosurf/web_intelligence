@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h1>あとは成形するだけ</h1>
+  <table border="1" width="800">
+  <tr>
+    <th>入力した住所</th><th>緯度</th><th>経度</th>
+  </tr>
+  <tr>
+    <th> <%= @basic_adress  %> </th>
+    <th> <%= @ido  %> </th>
+    <th> <%= @keido  %> </th>
+  </tr>
+</table>
+<h2>検索した資料をもつ図書館一覧</h2>
+
+<table border="1" width="800">
+<tr>
+  <th>ヒットした図書館名</th><th>住所</th>
+</tr>
+<br>
+<% @hash.each{|key,value| %>
+<tr>
+    <th> <%=key %> </th>
+    <th> <%=value %> </th>
+</tr>
+<%} %>
+
+</table>
+
+<h2>地図</h2>
+<div id="map" style="width:1000px; height:800px"></div>
+<script type="text/javascript" charset="utf-8" src="https://map.yahooapis.jp/js/V1/jsapi?appid=dj0zaiZpPUk5SHRiSDJGZkU2VCZzPWNvbnN1bWVyc2VjcmV0Jng9NzQ-"></script>
+<script type="text/javascript">
+  window.onload = function(){
+    var ymap = new Y.Map("map",{
+      configure : {
+         doubleClickZoom : true,
+         scrollWheelZoom : true,
+         singleClickPan : true,
+         dragging : true,
+       }
+    });
+    var control = new Y.SliderZoomControlVertical;
+    ymap.addControl(control);
+    ymap.drawMap(new Y.LatLng(<%= @ido %>, <%= @keido %>), 8, Y.LayerSetId.NORMAL);
+
+    //ここからラベルの追加
+        var address0 = "<%= @basic_adress  %> ";
+        var request0 = { query : address0 };
+        var geocoder0 = new Y.GeoCoder();
+        geocoder0.execute( request0 , function( ydf ) {
+          if ( ydf.features.length > 0 ) {
+              var latlng0 = ydf.features[0].latlng;
+              var label0 = new Y.Label(latlng0, "基準点");
+              ymap.addFeature(label0);
+          }
+        }) ;
+
+  <% @hash.each_with_index do |(key,value),i|%>
+      var address<%=i%> = "<%=value%>";
+      var request<%=i%> = { query : address<%=i%> };
+      var geocoder<%=i%> = new Y.GeoCoder();
+      geocoder<%=i%>.execute( request<%=i%> , function( ydf ) {
+        if ( ydf.features.length > 0 ) {
+            var latlng<%=i%> = ydf.features[0].latlng;
+            var label<%=i%> = new Y.Label(latlng<%=i%>, "<%=key%>");
+            ymap.addFeature(label<%=i%>);
+        }
+      }) ;
+    <%end%>
+}
+  </script>
+
+<table border="1" width="800">
+<tr>
+  <th>順位</th><th>図書館名</th>
+</tr>
+<br>
+<% @array_order.each_with_index do |univ,k| %>
+<tr>
+  <th> <%=k+1 %> </th>
+  <th> <%=univ %> </th>
+</tr>
+<%end %>
+</table>
+
+
+
+</script>
+</body>
+</html>
