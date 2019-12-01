@@ -23,7 +23,9 @@ get '/' do
 end
 
 get '/result_' do
-  yomikomi=20                                       #とってくる検索結果の数
+  yomikomi=params[:read_val]                                      #とってくる検索結果の数
+  puts yomikomi
+  # yomikomi=20                                      #とってくる検索結果の数
   appid ="jsqAbSa3aKX49y0tRjEY"                     #アプリケーションキー
   key_w="#{params[:key_word]}"                      #検索語
   @key_word = "#{params[:key_word]}"
@@ -67,32 +69,6 @@ get '/update_location' do          # 基準住所をアップデート
   @keido ="#{coord[0]}"
   book_id = "#{session[:book_id]}" #valueには本のID以外にも余計なものが入っているので削除
   hash=get_library_name(book_id)  #本のIDで図書館の名前と図書館の住所が入る
-
-
-  #データベース用い高速に
-
-
-  hash.each { |key,value|
-    #もし存在しなければ追加
-    if !Library_record.where(library_name:key).exists?
-      lib= Library_record.new(
-        library_name:key,
-        library_address:value
-      )
-      lib.save
-    #もし存在すればデータベースから読み出し
-    else
-
-      puts key
-      puts value
-    end
-    }
-
-
-
-
-
-
   @hash = hash
   array_order =libNmaeAdr_to_arrayOrder(hash,"#{params[:address_new]}")
   @array_order = array_order
@@ -105,19 +81,20 @@ def libNmaeAdr_to_arrayOrder(hash,kijyun)  #図書館の名前と住所ハッシ
   yolp = YOLP.new                  #地図を表示させるときに使うようになる
 	coord = yolp.coordinate("#{session[:kijyun]}")       #基準点の経度井戸を計算
   hash2=Hash.new { |h,k| h[k] = {} }#hashのの情報をすべて距離計算する
-    hash.each{|name,address|
-     target_library = yolp.coordinate(address)
-      dist_=yolp.distance([coord[1],coord[0]],[target_library[1],target_library[0]])
-        hash2[hash[name]]=dist_  #hashとhash2の二重ハッシュ｛図書館の名前＝＞｛図書館の住所＝＞基準との距離｝｝
-    }
-    temp= []
-    temp=hash2.sort {|(k1, v1), (k2, v2)| v1 <=> v2 }#距離順でソートしたのを配列に
-    array_order=[]
-    for n in temp do
-      # p n[0]
-      # p hash.invert[n[0]]
-      array_order.push(hash.invert[n[0]])  #ソートした距離から図書館の名前を取り出している
-    end
+  hash.each{|name,address|
+     # target_library = yolp.coordinate(address)
+     lib = Library_record.find_by(library_name:name)
+     dist_=yolp.distance([coord[1],coord[0]],[lib.ido,lib.keido])
+     hash2[hash[name]]=dist_  #hashとhash2の二重ハッシュ｛図書館の名前＝＞｛図書館の住所＝＞基準との距離｝｝
+  }
+  temp= []
+  temp=hash2.sort {|(k1, v1), (k2, v2)| v1 <=> v2 }#距離順でソートしたのを配列に
+  array_order=[]
+  for n in temp do
+    # p n[0]
+    # p hash.invert[n[0]]
+    array_order.push(hash.invert[n[0]])  #ソートした距離から図書館の名前を取り出している
+  end
 
   return array_order
 end
@@ -141,9 +118,28 @@ def get_library_name(key_w)               #本のIDが引数として与えら�
     hash = JSON.load(f)
     i = 1
     for n in hash["@graph"][0]["bibo:owner"] do
-      reHash.store("#{n["foaf:name"]}", get_adrress(n["@id"]))    #図書館の名前=>住所でハッシュ
+      #データベース用い高速に
+        #もし存在しなければ追加
+        if !Library_record.where(library_name:"#{n["foaf:name"]}").exists?
+          new_address=get_adrress(n["@id"])
+          yolp = YOLP.new                  #地図を表示させるときに使うようになる
+          target_library = yolp.coordinate(new_address) #ここで緯度と経度を計算しておく
+          lib= Library_record.new(
+            library_name:"#{n["foaf:name"]}",
+            library_address:new_address,
+            ido:target_library[1],
+            keido:target_library[0]
+          )
+          lib.save
+          reHash.store("#{n["foaf:name"]}", new_address)  #図書館の名前=>住所でハッシュ
+        #もし存在すればデータベースから読み出し
+        else
+          name_address = Library_record.find_by(library_name:"#{n["foaf:name"]}")
+          reHash.store("#{n["foaf:name"]}", name_address.library_address)    #図書館の名前=>住所でハッシュ
+        end
       i +=1
     end
   }
   return reHash
 end
+# CREATE TABLE library_records(id integer PRIMARY KEY, library_name text,library_address text,ido REAL,keido REAL);
