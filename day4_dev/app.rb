@@ -4,7 +4,19 @@ require 'sinatra'
 require './yolp'
 require "open-uri"
 require "json"
+require 'active_record'
 enable :sessions
+
+ActiveRecord::Base.establish_connection(
+  adapter:'sqlite3',
+  database:'sandbox.db'
+)
+
+class Library_record< ActiveRecord::Base
+end
+
+
+
 
 get '/' do
   erb :putInformation
@@ -37,24 +49,77 @@ get '/result' do
 	@ido = "#{coord[1]}"
 	@keido ="#{coord[0]}"
   book_id = "#{params[:value]}".delete!('http://ci.nii.ac.jp/ncid/') #valueには本のID以外にも余計なものが入っているので削除
+  session[:book_id] = book_id
   hash=get_library_name(book_id)  #本のIDで図書館の名前と図書館の住所が入る
   @hash = hash
+  array_order = libNmaeAdr_to_arrayOrder(hash,"#{session[:kijyun]}")
+  @array_order = array_order
+ 	 erb :display
+end
+
+
+#距離のアップデート出きるに出きる毎回get書くのは適切でない気がする
+get '/update_location' do          # 基準住所をアップデート
+  yolp = YOLP.new                  #地図を表示させるときに使うようになる
+	coord = yolp.coordinate("#{params[:address_new]}")       #基準点の経度井戸を計算
+  @basic_adress = "#{params[:address_new]}"
+  @ido = "#{coord[1]}"
+  @keido ="#{coord[0]}"
+  book_id = "#{session[:book_id]}" #valueには本のID以外にも余計なものが入っているので削除
+  hash=get_library_name(book_id)  #本のIDで図書館の名前と図書館の住所が入る
+
+
+  #データベース用い高速に
+
+
+  hash.each { |key,value|
+    #もし存在しなければ追加
+    if !Library_record.where(library_name:key).exists?
+      lib= Library_record.new(
+        library_name:key,
+        library_address:value
+      )
+      lib.save
+    #もし存在すればデータベースから読み出し
+    else
+
+      puts key
+      puts value
+    end
+    }
+
+
+
+
+
+
+  @hash = hash
+  array_order =libNmaeAdr_to_arrayOrder(hash,"#{params[:address_new]}")
+  @array_order = array_order
+  erb :display
+
+end
+
+
+def libNmaeAdr_to_arrayOrder(hash,kijyun)  #図書館の名前と住所ハッシュ基準値から距離順並べ配返す
+  yolp = YOLP.new                  #地図を表示させるときに使うようになる
+	coord = yolp.coordinate("#{session[:kijyun]}")       #基準点の経度井戸を計算
   hash2=Hash.new { |h,k| h[k] = {} }#hashのの情報をすべて距離計算する
     hash.each{|name,address|
      target_library = yolp.coordinate(address)
-    	dist_=yolp.distance([coord[1],coord[0]],[target_library[1],target_library[0]])
-			  hash2[hash[name]]=dist_  #hashとhash2の二重ハッシュ｛図書館の名前＝＞｛図書館の住所＝＞基準との距離｝｝
-		}
-		temp= []
-		temp=hash2.sort {|(k1, v1), (k2, v2)| v1 <=> v2 }#距離順でソートしたのを配列に
-		array_order=[]
-		for n in temp do
-			p n[0]
-			p hash.invert[n[0]]
-			array_order.push(hash.invert[n[0]])  #ソートした距離から図書館の名前を取り出している
-		end
- 		@array_order = array_order
- 	 erb :display
+      dist_=yolp.distance([coord[1],coord[0]],[target_library[1],target_library[0]])
+        hash2[hash[name]]=dist_  #hashとhash2の二重ハッシュ｛図書館の名前＝＞｛図書館の住所＝＞基準との距離｝｝
+    }
+    temp= []
+    temp=hash2.sort {|(k1, v1), (k2, v2)| v1 <=> v2 }#距離順でソートしたのを配列に
+    array_order=[]
+    for n in temp do
+      # p n[0]
+      # p hash.invert[n[0]]
+      array_order.push(hash.invert[n[0]])  #ソートした距離から図書館の名前を取り出している
+    end
+
+  return array_order
 end
 
 def get_adrress(id)
