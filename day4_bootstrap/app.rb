@@ -5,7 +5,6 @@ require './yolp'
 require "open-uri"
 require "json"
 require 'active_record'
-require 'uri'
 enable :sessions
 
 ActiveRecord::Base.establish_connection(
@@ -17,24 +16,23 @@ class Library_record< ActiveRecord::Base
 end
 
 
+
+
 get '/' do
   erb :putInformation
 end
 
 get '/result_' do
-  # yomikomi=params[:read_val]                                      #とってくる検索結果の数
-  yomikomi=20                                      #とってくる検索結果の数
+  yomikomi=params[:read_val]                                      #とってくる検索結果の数
+  puts yomikomi
+  # yomikomi=20                                      #とってくる検索結果の数
   appid ="jsqAbSa3aKX49y0tRjEY"                     #アプリケーションキー
   key_w="#{params[:key_word]}"                      #検索語
   @key_word = "#{params[:key_word]}"
   session[:kijyun] = "#{params[:address]}"          #sessionで基準点を使いまわし
   baseidURL = "https://ci.nii.ac.jp/books/opensearch/" #キーワードで検索時のURL
   target= baseidURL.gsub(/^http:/,"https:")
-  key_w = key_w.encode()
-  target = baseidURL+"search?title="+URI.encode(key_w)+"&format=json&appid="+appid
-
-  puts "target"
-  puts target
+  target = baseidURL+"search?title="+key_w+"&format=json&appid="+appid
   hash_title={}                                    #タイトルと住所の組み合わせのハッシュ
   open(target){|f|
       hash = JSON.load(f)

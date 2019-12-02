@@ -79,7 +79,7 @@
 }
   </script>
 
-<h1>距離順図書館</h1>
+<h1>距離順図書館ソート</h1>
 <table border="1" width="800">
 <tr>
   <th>順位</th><th>図書館名</th>
@@ -87,8 +87,9 @@
 <br>
 <% @array_order.each_with_index do |univ,k| %>
 <tr>
-  <th> <%=k+1 %> </th>
-  <th> <%=univ %> </th>
+  <th> <%=k+1 %> </th><th>
+  <%=univ %>
+</th>
 </tr>
 <%end %>
 </table>
