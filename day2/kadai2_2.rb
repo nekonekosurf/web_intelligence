@@ -11,11 +11,12 @@ def get_adrress(id)
   }
 end
 
-# baseidURL=ARGV.shift or exit
+
 key_w=ARGV.shift or exit
 baseidURL = "https://ci.nii.ac.jp/ncid/"+key_w+".json"
 target= baseidURL.gsub(/^http:/,"https:")
 file = File.open('result.json', "w");
+begin
 open(target){|f|
   hash = JSON.load(f)
   i = 1
@@ -27,3 +28,6 @@ open(target){|f|
     i +=1
   end
 }
+rescue => e
+puts e
+end

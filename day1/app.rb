@@ -23,9 +23,16 @@ get '/result' do
 
   yolp = YOLP.new
 	coord = yolp.coordinate("#{params[:address]}")
+	puts coord
+	if coord==nil or "#{params[:name]}"==nil 
+		erb :search
+	else	
 	@coord =  "北海道札幌市北区北１２条西８丁目の座標は北緯#{coord[1]}度東経#{coord[0]}度"
 	@ido = "#{coord[1]}"
 	@keido ="#{coord[0]}"
 	@name = "#{params[:name]}"
   erb :result_map
+  end
 end
+
+
