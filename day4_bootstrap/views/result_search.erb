@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h2>検索キーワード</h2>
+  <h3> <%= @key_word %> </h3>
+
+
+
+  <form method="get" action="/result_">
+      <p>
+        <select >
+        <option value=20>20</option>
+        <option value=50>50</option>
+        <option value=100>100</option>
+        </select>
+      </p>
+      <p><input type= "submit" value="更新"></p>
+  </form>
+
+  <h2>タイトル </h2>
+  <table border="1" width="800">
+    <tr>
+      <th>順位</th><th>ヒットした図書館名</th>
+    </tr>
+    <% @hash_title.each_with_index do |(key,value),k| %>
+      <tr>
+        <th> <%=k+1 %> </th>
+        <th>
+          <p>
+            <a href='/result?value=<%=value%>'><%=key %></a>
+          </p>
+        </th>
+
+      </tr>
+      <%end %>
+  </table>
+</body>
+</html>
