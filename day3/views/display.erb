@@ -6,7 +6,6 @@
   <table border="1" width="800">
   <tr>
     <th>入力した住所</th><th>緯度</th><th>経度</th>
-  </tr>
   <tr>
     <th> <%= @basic_adress  %> </th>
     <th> <%= @ido  %> </th>
@@ -17,15 +16,14 @@
 
 <table border="1" width="800">
 <tr>
-  <th>ヒットした図書館名</th><th>住所</th><th>緯度</th><th>経度</th>
+  <th>ヒットした図書館名</th><th>住所</th>
 </tr>
 <br>
 <% @hash.each{|key,value| %>
 <tr>
     <th> <%=key %> </th>
     <th> <%=value %> </th>
-    <th>  </th>
-    <th> keido </th>
+
 </tr>
 <%} %>
 </table>
