@@ -112,15 +112,19 @@ end
 get '/update_location' do          # 基準住所をアップデート
   yolp = YOLP.new                  # 地図を表示させるときに使うようになる
   coord = yolp.coordinate(params[:address_new].to_s) # 基準点の経度井戸を計算
-  @basic_adress = params[:address_new].to_s
-  @ido = (coord[1]).to_s
-  @keido = (coord[0]).to_s
-  book_id = session[:book_id].to_s # valueには本のID以外にも余計なものが入っているので削除
-  hash = get_library_name(book_id) # 本のIDで図書館の名前と図書館の住所が入る
-  @hash = hash
-  array_order = libNmaeAdr_to_arrayOrder(hash, params[:address_new].to_s)
-  @array_order = array_order
-  erb :display
+  if coord==nil
+    erb :display_error
+  else
+    @basic_adress = params[:address_new].to_s
+    @ido = (coord[1]).to_s
+    @keido = (coord[0]).to_s
+    book_id = session[:book_id].to_s # valueには本のID以外にも余計なものが入っているので削除
+    hash = get_library_name(book_id) # 本のIDで図書館の名前と図書館の住所が入る
+    @hash = hash
+    array_order = libNmaeAdr_to_arrayOrder(hash, params[:address_new].to_s)
+    @array_order = array_order
+    erb :display
+  end
 end
 
 def libNmaeAdr_to_arrayOrder(hash, _kijyun) # 図書館の名前と住所ハッシュ基準値から距離順並べ配返す
