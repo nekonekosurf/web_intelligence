@@ -208,4 +208,3 @@ def get_library_name(key_w) # 本のIDが引数として与えられる
   end
   reHash
 end
-# CREATE TABLE library_records(id integer PRIMARY KEY, library_name text,library_address text,ido REAL,keido REAL);
