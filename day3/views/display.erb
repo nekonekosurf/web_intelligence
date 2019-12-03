@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <body>
-  <h1>あとは成形するだけ</h1>
-  <p>入力した住所と43.5,135.5との距離: <%= @dist %></p>
+  <h1>基準点</h1>
   <table border="1" width="800">
   <tr>
     <th>入力した住所</th><th>緯度</th><th>経度</th>
@@ -27,8 +26,7 @@
 </tr>
 <%} %>
 </table>
-
-    <h2>ここに地図を挿入</h2>
+    <h2>地図</h2>
     <div id="map" style="width:1000px; height:800px"></div>
     <script type="text/javascript" charset="utf-8" src="https://map.yahooapis.jp/js/V1/jsapi?appid=dj0zaiZpPUk5SHRiSDJGZkU2VCZzPWNvbnN1bWVyc2VjcmV0Jng9NzQ-"></script>
     <script type="text/javascript">
@@ -44,7 +42,6 @@
       var control = new Y.SliderZoomControlVertical;
       ymap.addControl(control);
       ymap.drawMap(new Y.LatLng(<%= @ido %>, <%= @keido %>), 8, Y.LayerSetId.NORMAL);
-
     //ここからラベルの追加
       var address0 = "<%= @basic_adress  %> ";
       var request0 = { query : address0 };
@@ -72,6 +69,7 @@
 }
   </script>
 
+<h1>ソート後</h1>
 <table border="1" width="800">
 <tr>
   <th>順位</th><th>図書館名</th>
@@ -84,9 +82,6 @@
 </tr>
 <%end %>
 </table>
-
-
-
 </script>
 </body>
 </html>

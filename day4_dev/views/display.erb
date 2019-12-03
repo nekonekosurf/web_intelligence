@@ -25,15 +25,11 @@
     <th> <%=value %> </th>
 </tr>
 <%} %>
-
 </table>
-
 <form action='update_location' method='get'>
   <b>基準となる住所: </b>  <input type="text" name="address_new" value="">
   <button type='submit' class='btn btn-primary'>検索</button>
 </form>
-
-
 
 <h2>地図</h2>
 <div id="map" style="width:1200px; height:800px"></div>
@@ -51,7 +47,6 @@
     var control = new Y.SliderZoomControlVertical;
     ymap.addControl(control);
     ymap.drawMap(new Y.LatLng(<%= @ido %>, <%= @keido %>), 5, Y.LayerSetId.NORMAL);
-
     //ここからラベルの追加
         var address0 = "<%= @basic_adress  %> ";
         var request0 = { query : address0 };
@@ -63,7 +58,6 @@
               ymap.addFeature(label0);
           }
         }) ;
-
   <% @hash.each_with_index do |(key,value),i|%>
       var address<%=i%> = "<%=value%>";
       var request<%=i%> = { query : address<%=i%> };
@@ -92,9 +86,6 @@
 </tr>
 <%end %>
 </table>
-
-
-
 </script>
 </body>
 </html>

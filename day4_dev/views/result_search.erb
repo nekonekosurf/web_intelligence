@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-
   </head>
   <body>
     <script type="text/javascript">
@@ -14,12 +13,11 @@
         console.log(value);
       }
     </script>
-
-
     <h2>検索キーワード</h2>
     <h3>
       <%= @key_word %>
     </h3>
+    <!-- 以下のフォーム使用しなかった。 -->
     <form name="form1" action="">
       <select id="select" onchange="b_click();">
         <option value="10">10</option>
@@ -34,7 +32,7 @@
     <table border="1" width="800">
       <tr>
         <th>順位</th>
-        <th>ヒットした図書館名</th>
+        <th>ヒットした図書名</th>
       </tr>
       <% cnt=0 %>
         <% @hash_title.each_with_index do |(key,value),k| %>

@@ -1,6 +1,5 @@
 require "open-uri"
 require "json"
-# そもそこのやりかたあってる分からない
 def get_adrress(id)
   baseidURL = id
   target= baseidURL.gsub(/^http:/,"https:")
@@ -10,7 +9,6 @@ def get_adrress(id)
     p hash["@graph"][0]["v:adr"]["v:label"]
   }
 end
-
 
 key_w=ARGV.shift or exit
 baseidURL = "https://ci.nii.ac.jp/ncid/"+key_w+".json"
