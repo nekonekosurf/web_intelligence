@@ -28,34 +28,34 @@
 <%} %>
 </table>
 
-<h2>ここに地図を挿入</h2>
-<div id="map" style="width:1000px; height:800px"></div>
-<script type="text/javascript" charset="utf-8" src="https://map.yahooapis.jp/js/V1/jsapi?appid=dj0zaiZpPUk5SHRiSDJGZkU2VCZzPWNvbnN1bWVyc2VjcmV0Jng9NzQ-"></script>
-<script type="text/javascript">
-  window.onload = function(){
-    var ymap = new Y.Map("map",{
-      configure : {
-         doubleClickZoom : true,
-         scrollWheelZoom : true,
-         singleClickPan : true,
-         dragging : true,
-       }
-    });
-    var control = new Y.SliderZoomControlVertical;
-    ymap.addControl(control);
-    ymap.drawMap(new Y.LatLng(<%= @ido %>, <%= @keido %>), 8, Y.LayerSetId.NORMAL);
+    <h2>ここに地図を挿入</h2>
+    <div id="map" style="width:1000px; height:800px"></div>
+    <script type="text/javascript" charset="utf-8" src="https://map.yahooapis.jp/js/V1/jsapi?appid=dj0zaiZpPUk5SHRiSDJGZkU2VCZzPWNvbnN1bWVyc2VjcmV0Jng9NzQ-"></script>
+    <script type="text/javascript">
+    window.onload = function(){
+      var ymap = new Y.Map("map",{
+        configure : {
+          doubleClickZoom : true,
+          scrollWheelZoom : true,
+          singleClickPan : true,
+          dragging : true
+        }
+      });
+      var control = new Y.SliderZoomControlVertical;
+      ymap.addControl(control);
+      ymap.drawMap(new Y.LatLng(<%= @ido %>, <%= @keido %>), 8, Y.LayerSetId.NORMAL);
 
     //ここからラベルの追加
-        var address0 = "<%= @basic_adress  %> ";
-        var request0 = { query : address0 };
-        var geocoder0 = new Y.GeoCoder();
-        geocoder0.execute( request0 , function( ydf ) {
-          if ( ydf.features.length > 0 ) {
-              var latlng0 = ydf.features[0].latlng;
-              var label0 = new Y.Label(latlng0, "基準点");
-              ymap.addFeature(label0);
-          }
-        }) ;
+      var address0 = "<%= @basic_adress  %> ";
+      var request0 = { query : address0 };
+      var geocoder0 = new Y.GeoCoder();
+      geocoder0.execute( request0 , function( ydf ) {
+        if ( ydf.features.length > 0 ) {
+            var latlng0 = ydf.features[0].latlng;
+            var label0 = new Y.Label(latlng0, "基準点");
+            ymap.addFeature(label0);
+        }
+      }) ;
 
   <% @hash.each_with_index do |(key,value),i|%>
       var address<%=i%> = "<%=value%>";

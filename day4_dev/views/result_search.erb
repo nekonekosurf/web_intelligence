@@ -1,22 +1,31 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <script type="text/javascript">
+      function b_click() {
+        var value;
+        idx = document.form1.select.selectedIndex;
+        console.log(idx);
+        value = document.form1.select[idx].value;
+        value = parseInt(value, 10);
+        console.log(value);
+      }
+    </script>
+  </head>
   <body>
     <h2>検索キーワード</h2>
     <h3>
       <%= @key_word %>
     </h3>
-
-    <form method="get" action="/result_">
-      <p>
-        <select >
-          <option value="20">20</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-        </select>
-      </p>
-      <p><input type="submit" value="更新"></p>
+    <form name="form1" action="">
+      <select id="select" onchange="b_click();">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="200">200</option>
+      </select>
     </form>
-
     <h2>タイトル
     </h2>
     <table border="1" width="800">
@@ -24,19 +33,22 @@
         <th>順位</th>
         <th>ヒットした図書館名</th>
       </tr>
-      <% @hash_title.each_with_index do |(key,value),k| %>
-        <tr>
-          <th>
-            <%=k+1 %>
-          </th>
-          <th>
-            <p>
-              <a href='/result?value=<%=value%>'><%=key %></a>
-            </p>
-          </th>
-
-        </tr>
-      <%end %>
-    </table>
-  </body>
-</html>
+      <% cnt=0 %>
+        <% @hash_title.each_with_index do |(key,value),k| %>
+          <% cnt+=1 %>
+            <tr>
+              <th>
+                <%=k+1 %>
+              </th>
+              <th>
+                <p>
+                  <a href='/result?value=<%=value%>'><%=key %></a>
+                </p>
+              </th>
+            </tr>
+            <% if cnt==value
+           break
+         end %><%end %>
+          </table>
+        </body>
+      </html>
