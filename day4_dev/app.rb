@@ -30,6 +30,7 @@ get '/result_' do
   end
   appid = 'jsqAbSa3aKX49y0tRjEY' # アプリケーションキー
   key_w = params[:key_word].to_s # 検索語
+  @select= params[:select].to_i
   @key_word = params[:key_word].to_s
   session[:kijyun] = params[:address].to_s # sessionで基準点を使いまわし
   baseidURL = 'https://ci.nii.ac.jp/books/opensearch/' # キーワードで検索時のURL
@@ -40,6 +41,7 @@ get '/result_' do
   puts 'target'
   puts target
   hash_title = {} # タイトルと住所の組み合わせのハッシュ
+  begin
   open(target) do |f|
     hash = JSON.load(f)
     min = hash['@graph'][0]['opensearch:totalResults'].to_i
@@ -85,6 +87,10 @@ get '/result_' do
         end
       end
   end
+rescue=>e
+  puts e
+  redirect '/'
+end
   @hash_title = hash_title
   erb :result_search
 end

@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
+
+  </head>
+  <body>
     <script type="text/javascript">
       function b_click() {
         var value;
@@ -11,8 +14,8 @@
         console.log(value);
       }
     </script>
-  </head>
-  <body>
+
+
     <h2>検索キーワード</h2>
     <h3>
       <%= @key_word %>
@@ -46,7 +49,7 @@
                 </p>
               </th>
             </tr>
-            <% if cnt==5
+            <% if cnt== @select
            break
          end %><%end %>
           </table>
